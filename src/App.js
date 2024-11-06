@@ -1,44 +1,45 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
   const [image, setImage] = useState(null);
-  const [progress, setProgress] = useState(0);
+  const [processedImage, setProcessedImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
-  const [analysisText, setAnalysisText] = useState('');
 
   // Handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
-      setProgress(0);
-      setAnalysisText(''); // Clear analysis text on new upload
+      setImage(file);
+      setProcessedImage(null); // Clear any previous result
     }
   };
 
-  // Simulate analysis process
-  const analyzeImage = () => {
+  // Send the image to the Python backend for processing
+  const analyzeImage = async () => {
+    if (!image) return;
+
     setAnalyzing(true);
-    setProgress(0);
-    setAnalysisText(''); // Clear text before new analysis
+    const formData = new FormData();
+    formData.append('image', image);
 
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          clearInterval(interval);
-          setAnalyzing(false);
-          setAnalysisText('Analysis complete! This is where the analysis results would appear.');
-          return 100;
-        }
-        return prevProgress + 10;
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/process-image', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        responseType: 'blob', // Receive the image as a blob
       });
-    }, 500);
-  };
 
-  // Download function (not implemented, placeholder for now)
-  const downloadImage = () => {
-    alert('Download functionality would go here.');
+      // Convert the response blob to a URL and set it for display
+      const url = URL.createObjectURL(response.data);
+      setProcessedImage(url);
+    } catch (error) {
+      console.error("Error processing the image:", error);
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   return (
@@ -51,23 +52,20 @@ function App() {
           <button onClick={analyzeImage} className="analyze-button" disabled={!image || analyzing}>
             {analyzing ? 'Analyzing...' : 'Analyze'}
           </button>
-          <button onClick={downloadImage} className="download-button" disabled={!image || analyzing}>
-            Download
-          </button>
-          {analyzing && (
-            <div className="progress-container">
-              <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-              <span>{progress}%</span>
-            </div>
-          )}
-          {analysisText && <p className="analysis-text">{analysisText}</p>}
         </div>
 
-        {/* Right Column - Image Preview */}
+        {/* Right Column - Display Original and Processed Images */}
         <div className="right-column">
           {image && (
             <div className="image-preview">
-              <img src={image} alt="Uploaded Preview" />
+              <h2>Original Image</h2>
+              <img src={URL.createObjectURL(image)} alt="Uploaded" />
+            </div>
+          )}
+          {processedImage && (
+            <div className="image-preview">
+              <h2>Processed Image</h2>
+              <img src={processedImage} alt="Processed" />
             </div>
           )}
         </div>
