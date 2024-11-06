@@ -1,81 +1,99 @@
-/* Reset some default styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Container for two-column layout */
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+  gap: 2rem;
+}
+/* Left column for buttons and text with grey background */
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #f2f2f2; /* Light grey background */
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
 }
 
-/* Apply a modern font */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  background-color: #f5f5f7; /* A subtle off-white, Apple-like background */
-  color: #1d1d1f; /* Dark gray for text */
+
+/* Right column for image preview */
+.right-column {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
-
-/* Center the main content */
-.App {
-  text-align: center;
-}
-
-/* Style for the "Hello World" text */
-h1 {
-  font-size: 3rem;
-  font-weight: 600;
-  color: #1d1d1f; /* Dark text for contrast */
-  margin-bottom: 1rem;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Subtle animation for the text */
-h1 {
-  animation: fadeIn 1s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Styling the upload button */
-.upload-button {
-  margin-top: 1.5rem;
+/* Buttons styling */
+.upload-button, .analyze-button, .download-button {
+  margin-top: 1rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
+  width: 100%; /* Full width within container */
+  max-width: 300px; /* Optional max width */
   color: #ffffff;
-  background-color: #007aff; /* Apple-like blue */
+  background-color: #333333; /* Dark grey */
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   outline: none;
+  transition: background-color 0.3s ease;
+  text-align: center;
 }
 
-.upload-button:hover {
-  background-color: #005bb5; /* Darker blue on hover */
+.upload-button:hover, .analyze-button:hover, .download-button:hover {
+  background-color: #555555; /* Lighter grey on hover */
 }
 
-/* Image preview container */
-.image-preview {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Disabled button styling for analysis in progress */
+.analyze-button:disabled, .download-button:disabled {
+  background-color: #999999; /* Lighter grey when disabled */
+  cursor: not-allowed;
 }
 
-.image-preview img {
+/*.upload-button:hover { background-color: #005bb5; }*/
+/*.analyze-button:hover { background-color: #218838; }*/
+/*.download-button:hover { background-color: #cc7a00; }*/
+
+.progress-container {
+  margin-top: 1rem;
+  width: 100%;
   max-width: 300px;
-  max-height: 300px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar {
+  height: 1rem;
+  background-color: #007aff;
+  transition: width 0.5s ease;
+}
+
+.progress-container span {
+  position: absolute;
+  font-size: 0.9rem;
+  color: #1d1d1f;
+}
+
+.analysis-text {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Image preview styling */
+.image-preview img {
+  max-width: 100%;
+  max-height: 400px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

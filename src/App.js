@@ -5,13 +5,15 @@ function App() {
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const [analyzing, setAnalyzing] = useState(false);
+  const [analysisText, setAnalysisText] = useState('');
 
   // Handle image upload
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(URL.createObjectURL(file));
-      setProgress(0); // Reset progress for new image
+      setProgress(0);
+      setAnalysisText(''); // Clear analysis text on new upload
     }
   };
 
@@ -19,35 +21,38 @@ function App() {
   const analyzeImage = () => {
     setAnalyzing(true);
     setProgress(0);
+    setAnalysisText(''); // Clear text before new analysis
 
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
           clearInterval(interval);
-          setAnalyzing(false); // End analysis
+          setAnalyzing(false);
+          setAnalysisText('Analysis complete! This is where the analysis results would appear.');
           return 100;
         }
-        return prevProgress + 10; // Increase progress by 10% every second
+        return prevProgress + 10;
       });
-    }, 500); // Adjust speed here
+    }, 500);
+  };
+
+  // Download function (not implemented, placeholder for now)
+  const downloadImage = () => {
+    alert('Download functionality would go here.');
   };
 
   return (
     <div className="App">
-      <h1>Climate Truth Filter</h1>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-        className="upload-button"
-      />
-      {image && (
-        <>
-          <div className="image-preview">
-            <img src={image} alt="Uploaded Preview" />
-          </div>
-          <button onClick={analyzeImage} className="analyze-button" disabled={analyzing}>
-            {analyzing ? 'Analyzing...' : 'Analyze Image'}
+      <div className="container">
+        {/* Left Column - User Interface */}
+        <div className="left-column">
+          <h1>Image Analysis</h1>
+          <input type="file" accept="image/*" onChange={handleImageUpload} className="upload-button" />
+          <button onClick={analyzeImage} className="analyze-button" disabled={!image || analyzing}>
+            {analyzing ? 'Analyzing...' : 'Analyze'}
+          </button>
+          <button onClick={downloadImage} className="download-button" disabled={!image || analyzing}>
+            Download
           </button>
           {analyzing && (
             <div className="progress-container">
@@ -55,8 +60,18 @@ function App() {
               <span>{progress}%</span>
             </div>
           )}
-        </>
-      )}
+          {analysisText && <p className="analysis-text">{analysisText}</p>}
+        </div>
+
+        {/* Right Column - Image Preview */}
+        <div className="right-column">
+          {image && (
+            <div className="image-preview">
+              <img src={image} alt="Uploaded Preview" />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
