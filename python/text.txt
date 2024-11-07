@@ -1,0 +1,19 @@
+FALSE: ‘An EV has to travel 50,000+ miles to break even’
+
+One of the most common false claims made against EVs is that they offer little or no climate benefit over conventional cars, due to the emissions associated with making their battery.
+
+In a Twitter post promoting his anti-EV comment article for the Daily Mail, for example, the climate-sceptic former Conservative peer Matt Ridley claimed:
+
+    “An EV has to travel 50,000+ miles to break even with an ICE [internal combustion engine] car. That number is growing, not shrinking.”
+
+This is doubly false. As Carbon Brief showed in its 2019 factcheck, it takes less than two years for a typical EV to pay off the “carbon debt” from its battery. Over the full vehicle lifecycle, carbon dioxide (CO2) emissions from an EV are around three times lower than an average petrol car.
+
+In reality, therefore, an EV in Europe will pay off its carbon debt after around 11,000 miles (18,000km), according to the International Council on Clean Transportation (ICCT).
+
+Moreover, the lifecycle benefits of EVs are increasing over time as electricity grids get cleaner.
+
+In a 2021 lifecycle analysis, the ICCT found that an EV bought in Europe would cut emissions by 66-69%, relative to a conventional car. By 2030, this emissions saving would rise to 74-77%, the ICCT said, “as the electricity mix continues to decarbonise”.
+
+New Carbon Brief analysis shows that a Tesla Model Y, the world’s best-selling EV, would pay off its “carbon debt” after around 13,000 miles in the UK (21,000km), as shown in the figure below.
+
+This would take less than two years for the average UK driver.

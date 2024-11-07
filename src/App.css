@@ -1,34 +1,75 @@
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 
-/* Container for two-column layout */
-.container {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-  gap: 2rem;
-}
-/* Left column for buttons and text with grey background */
-.left-column {
-  flex: 1;
+/* Overall Layout */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  background-color: #f2f2f2; /* Light grey background */
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Soft shadow for depth */
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Left Column Styling */
+.left-column {
+  width: 33.33%; /* 1/3 of the screen */
+  background-color: #f1f1f1; /* Slightly darker background */
+  padding: 2rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed; /* Fixed on the left side */
+  top: 0;
+  bottom: 0;
+}
+
+/* Right Column Styling */
+.right-column {
+  margin-left: 40%; /* Start to the right of the fixed left column */
+  width: 60%; /* 1/3 of the screen */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+/* Tab Selector Styling */
+.tab-selector {
+  display: flex;
+  align-items: center; /* Center aligns the content horizontally */
+  justify-content: center; /* Center align the buttons within the tab selector */
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 1rem;
+  width: 100%; /* Full width of the right column */
+  max-width: 400px; /* Optional: Limit the max width of the buttons container */
 }
 
 
-/* Right column for image preview */
-.right-column {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.tab-selector button {
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-selector button.active {
+  border-bottom: 2px solid #0073e6; /* Highlight active tab */
+  color: #0073e6;
+  font-weight: bold;
+}
+
+.tab-selector button:hover {
+  color: #005bb5;
 }
 /* Buttons styling */
 .upload-button, .analyze-button, .download-button {
@@ -95,13 +136,40 @@
   color: #333;
 }
 
-/* Image preview styling */
+
+/* Tab Selector */
+.tab-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Image Container - Left Alignment */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Left-align images */
+}
+
+/* Image Grid - 2 Column Layout */
+.image-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 equal-width columns */
+  gap: 1rem; /* Space between columns */
+}
+
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .image-preview img {
   max-width: 100%;
-  max-height: 400px;
+  max-height: 200px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
 .social-icons a {
   display: inline-flex;
   align-items: center;
@@ -111,7 +179,7 @@
   text-decoration: none;
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 10px 0px;      /* Add padding to make buttons larger */
+  padding: 20px 0px;      /* Add padding to make buttons larger */
   border-radius: 8px;      /* Optional: rounded corners for button effect */
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
@@ -123,4 +191,45 @@
 
 .social-icons i {
   margin-right: 8px;         /* Space between icon and text */
+}
+/* Analysis Box Styling */
+.analysis-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f0f0f0; /* Light gray background */
+  border-radius: 8px;
+  color: #333;
+  font-size: 1rem;
+  box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow */
+}
+
+.analysis-box p {
+  margin: 0;
+}
+
+/* Header container */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Space between logo and heading */
+}
+
+/* Logo styling */
+.logo {
+  width: 70px; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Gallery Grid Layout */
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.gallery-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
