@@ -1,3 +1,5 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
 /* Container for two-column layout */
 .container {
   display: flex;
@@ -34,7 +36,6 @@
   padding: 0.5rem 1rem;
   font-size: 1rem;
   width: 100%; /* Full width within container */
-  max-width: 300px; /* Optional max width */
   color: #ffffff;
   background-color: #333333; /* Dark grey */
   border: none;
@@ -43,6 +44,11 @@
   outline: none;
   transition: background-color 0.3s ease;
   text-align: center;
+}
+
+/* Hide the native file input */
+.upload-button-hidden {
+  display: none;
 }
 
 .upload-button:hover, .analyze-button:hover, .download-button:hover {
@@ -62,7 +68,6 @@
 .progress-container {
   margin-top: 1rem;
   width: 100%;
-  max-width: 300px;
   background-color: #e0e0e0;
   border-radius: 5px;
   overflow: hidden;
@@ -96,4 +101,26 @@
   max-height: 400px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;      /* Increased margin between icons */
+  color: #444;
+  text-decoration: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 10px 0px;      /* Add padding to make buttons larger */
+  border-radius: 8px;      /* Optional: rounded corners for button effect */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.social-icons a:hover {
+  background-color: #f0f0f0; /* Light background on hover */
+  color: #000;               /* Darker color on hover for effect */
+}
+
+.social-icons i {
+  margin-right: 8px;         /* Space between icon and text */
 }
