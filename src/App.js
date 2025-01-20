@@ -171,8 +171,8 @@ function App() {
         {/* Left Column - User Interface */}
         <div className="left-column">
           <div className="header">
-          <img src="/logo.jpg" alt="Climate Truth Filter Logo" className="logo" />
-          <h1>Climate Truth Filter</h1>
+          <img src="/logo.jpg" alt="Fuel Fake Filter Logo" className="logo" />
+          <h1>Fuel Fake Filter</h1>
         </div>
 
           {/* Hidden file input */}
@@ -294,7 +294,7 @@ function App() {
           {activeTab === 'dashboard' && (
             <div className="dashboard-content">
               <iframe
-                title="Climate Truth Filter"
+                title="Fuel Fake Filter"
                 width="100%"
                 height="300%"
                 src="https://app.powerbi.com/view?r=eyJrIjoiYzc5MWNlZDYtZDNhYy00YjZiLTk4M2QtYzk3NzYxM2NhYjJmIiwidCI6ImEwODJkYmJjLWQ4OWQtNDAxOC1iMzM2LTcyNzlmMjIxNzdlYiIsImMiOjl9"

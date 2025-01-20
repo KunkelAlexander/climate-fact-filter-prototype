@@ -1,70 +1,27 @@
-# Getting Started with Create React App
+# Climate Fact Filter - Empower NGOs to separate fact from fiction
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Team
+Elise Van De Putte, Vicky Cornelis, Gilles Ghys, Verner Viisainen, Alexander Kunkel
 
-## Available Scripts
+## Submission for ECF AI Hackathon Challenge 1: Combatting misinformation and fake news
 
-In the project directory, you can run:
+### Topic
+- Vast amounts of misinformation on environmental issues are shared through mass media and are often amplified through social media.
+- How can we leverage AI to identify and classify misinformation and fake news on climate in mass media? While working with journalists and editors to deliver credible, reliable, and compelling coverage?
 
-### `npm start`
+### Our proposal
+- Input: Social media post relevant to NGO topic
+- Run LLM using NGO publications to factcheck the claim and produce a shareable social media post
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Benefits
+- NGO staff have more time to work on core tasks
+- Extends the lifetime of reports
+- Produces easily shareable content
+- Improves the brand/reputation of the NGO
+- Counters fake news while spreading correct news
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Prototype completed during Hackathon
+### Technology
+- React frontend + Python backend
+- Functional: Upload of screenshots and querying OpenAI API for factcheck
+- Not yet functional: Integration of vectorised databased, sharing on social media, gallery, dashboard
