@@ -1,5 +1,7 @@
 # Climate Fact Filter - Empower NGOs to separate fact from fiction
 
+![Main screen of prototype](/screenshots/main.png?raw=true "")
+![Dashboard](/screenshots/dashboard.png?raw=true "")
 ## Team
 Elise Van De Putte, Vicky Cornelis, Gilles Ghys, Verner Viisainen, Alexander Kunkel
 
