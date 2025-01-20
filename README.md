@@ -1,9 +1,8 @@
 # Climate Fact Filter - Empower NGOs to separate fact from fiction
+## Team: Elise Van De Putte, Vicky Cornelis, Gilles Ghys, Verner Viisainen, Alexander Kunkel
 
 ![Main screen of prototype](/screenshots/main.png?raw=true "")
 ![Dashboard](/screenshots/dashboard.png?raw=true "")
-## Team
-Elise Van De Putte, Vicky Cornelis, Gilles Ghys, Verner Viisainen, Alexander Kunkel
 
 ## Submission for ECF AI Hackathon Challenge 1: Combatting misinformation and fake news
 
