@@ -1,6 +1,5 @@
 # Climate Fact Filter - Empower NGOs to separate fact from fiction
-
-- *Authors*: Elise Van De Putte, Vicky Cornelis, Gilles Ghys, Verner Viisainen, Alexander Kunkel
+### *Authors*: Elise Van De Putte, Vicky Cornelis, Gilles Ghys, Verner Viisainen, Alexander Kunkel
 
 - Empower NGOs to separate fact from fiction.
 
