@@ -3,8 +3,7 @@
 
 - Empower NGOs to separate fact from fiction.
 
-![Main screen of prototype](/screenshots/main.png?raw=true)
-![Dashboard](/screenshots/dashboard.png?raw=true)
+![Recording](/screenshots/recording.gif?raw=true)
 
 ## Submission for ECF AI Hackathon Challenge 1: Combatting Misinformation and Fake News
 
