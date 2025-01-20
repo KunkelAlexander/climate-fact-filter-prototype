@@ -15,7 +15,8 @@ import faiss
 import numpy as np
 import requests
 
-#from openai import OpenAI
+from openai import OpenAI
+client = OpenAI()
 
 import hashlib
 from sqlalchemy import create_engine, Column, String, Integer
@@ -48,9 +49,6 @@ Base.metadata.create_all(engine)  # Create tables
 
 
 # Initialize the OpenAI client
-#client = OpenAI(api_key="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")
-
-
 # Step 1: Extract Text from PDF
 def extract_text_from_pdf(file_path):
     reader = PdfReader(file_path)
@@ -191,36 +189,29 @@ embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
 folder_path = r"C:\Users\TE\Documents\fake_news_sharepics\my-cross-platform-app\python\reports"  # Replace with your folder path
 
 # Process all PDFs in the folder
-all_chunks, chunk_metadata = process_multiple_pdfs(folder_path)
+#all_chunks, chunk_metadata = process_multiple_pdfs(folder_path)
 
 # Step 3: Create FAISS index
-index, embeddings = create_faiss_index(all_chunks, embedding_model)
+#index, embeddings = create_faiss_index(all_chunks, embedding_model)
 
 
 print("System ready! You can now ask questions.")
 
 
-def check_truth_with_ollama(extracted_text):
-
-
-    # Step 3: Query and retrieve relevant chunks with metadata
-    query = f"Keep your answer very short. Is the statement true or false? {extracted_text}"
-    print("Asking ollama: ", query)
-    retrieved_chunks, retrieved_metadata = retrieve_with_metadata(query, index, embedding_model, all_chunks, chunk_metadata)
-
-    # Step 4: Generate answer with citations
-    answer_with_citation = generate_answer_with_citation(query, retrieved_chunks, retrieved_metadata)
-
-    return answer_with_citation
+#def check_truth_with_ollama(extracted_text):
+#
+#
+#    # Step 3: Query and retrieve relevant chunks with metadata
+#    query = f"Keep your answer very short. Is the statement true or false? {extracted_text}"
+#    print("Asking ollama: ", query)
+#    retrieved_chunks, retrieved_metadata = retrieve_with_metadata(query, index, embedding_model, all_chunks, chunk_metadata)
+#
+#    # Step 4: Generate answer with citations
+#    answer_with_citation = generate_answer_with_citation(query, retrieved_chunks, retrieved_metadata)
+#
+#    return answer_with_citation
 
 def check_truth_with_chatgpt(extracted_text):
-
-    file_path = r'C:\Users\TE\Documents\fake_news_sharepics\python\text.txt'  # Replace with the correct path
-
-    # Reading the file content into a string
-    with open(file_path, 'r', encoding='utf-8') as file:
-        carbon_brief_text = file.read()
-
     # Create a prompt to send to OpenAI's API
     prompt = f"Is this a true or false about global warming? If it is false, please rewrite the key false statement as a truthful statement. {extracted_text}"
 
@@ -300,8 +291,8 @@ def process_image():
 
 
     # Save the input and output images
-    input_image_path = f"my-cross-platform-app/uploads/{image_hash}_input.jpg"
-    output_image_path = f"my-cross-platform-app/uploads/{image_hash}_output.jpg"
+    input_image_path = f"../uploads/{image_hash}_input.jpg"
+    output_image_path = f"../uploads/{image_hash}_output.jpg"
     image.save(input_image_path, "JPEG")
 
     # Perform OCR on the image to extract text
@@ -309,9 +300,8 @@ def process_image():
     print("Extracted Text:", extracted_text)  # Debugging print
 
     # Call OpenAI API to check if the text is true or false
-    truthfulness_response = check_truth_with_ollama(extracted_text)
+    truthfulness_response = check_truth_with_chatgpt(extracted_text)
     print("ChatGPT Response:", truthfulness_response)  # Debugging print
-
     negated_response = truthfulness_response
 
     # Load a comic-style font
@@ -344,7 +334,7 @@ def process_image():
 
 
     # Load the logo (seal.png)
-    logo = Image.open(r'C:\Users\TE\Documents\fake_news_sharepics\python\logo.png').convert("RGBA")
+    logo = Image.open(r'logo.png').convert("RGBA")
 
     # Scale the logo to be small (e.g., 10% of the image width)
     logo_width = 1 * image.width // 3
