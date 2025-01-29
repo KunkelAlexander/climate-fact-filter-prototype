@@ -30,3 +30,6 @@ app\secret.py
 
 node_modules
 .pytest_cache
+
+python/embeddings
+*.pyc

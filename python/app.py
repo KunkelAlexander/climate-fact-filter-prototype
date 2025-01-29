@@ -5,6 +5,7 @@ import os
 import time
 import json
 import hashlib
+import search_faiss
 
 from PIL import Image, ImageDraw, ImageFont
 import pytesseract
@@ -40,6 +41,19 @@ class ImageRecord(Base):
 Base.metadata.create_all(engine)
 
 print("System ready! You can now ask questions.")
+
+# -------------------------------------------
+# 1A. FAISS Initialization (Important)
+# -------------------------------------------
+print("Loading the FAISS index...")
+faiss_index, embedding_model, all_chunks, metadata, normalise = search_faiss.initialize_search_index(
+    model_name="all-mpnet-base-v2",   # or your chosen model
+    similarity_metric="L2"           # or "Cosine", etc.
+)
+ALPHA = 0.05
+SELECTED_TYPES = ['Briefing', 'Press Release', 'Unknown Type', 'Report', 'Letter',
+       'Opinion', 'News', 'Publication', 'Consultation response', 'Internal', 'Spreadsheet'] # or a list of types if you want to filter
+print("FAISS index loaded successfully!")
 
 #######################################################
 # 2. Helper Functions
@@ -95,44 +109,37 @@ def apply_grayscale_overlay_with_red_crosses(image: Image.Image, alpha=0.5) -> I
     draw.line((0, overlay_image.height, overlay_image.width, 0), fill="red", width=20)
     return overlay_image
 
-def edit_image_with_logo_and_text(image_bytes: bytes, logo_path: str, text_overlay: str) -> Image.Image:
+def edit_image_with_logo_and_text(image_bytes: bytes, logo_path: str, is_likely_true: bool) -> Image.Image:
     """
-    Applies the red-cross overlay, attaches a logo in the bottom-right corner,
+    Applies the red-cross overla if false, attaches a logo in the bottom-right corner,
     and draws the answer text on the image.
     """
     image = Image.open(BytesIO(image_bytes))
     if image.mode == 'RGBA':
         image = image.convert('RGB')
 
-    # 1) Apply grayscale overlay with crosses
-    edited = apply_grayscale_overlay_with_red_crosses(image, alpha=0.5)
+    if not is_likely_true:
+        # 1) Apply grayscale overlay with crosses
+        edited = apply_grayscale_overlay_with_red_crosses(image, alpha=0.5)
 
-    # 2) Additional big cross lines (optional, you might remove if redundant)
-    draw = ImageDraw.Draw(edited)
-    draw.line((0, 0, edited.width, edited.height), fill="red", width=20)
-    draw.line((0, edited.height, edited.width, 0), fill="red", width=20)
-
+        # 2) Additional big cross lines (optional, you might remove if redundant)
+        draw = ImageDraw.Draw(edited)
+        draw.line((0, 0, edited.width, edited.height), fill="red", width=20)
+        draw.line((0, edited.height, edited.width, 0), fill="red", width=20)
+    else:
+        edited = image
     # 3) Insert the logo (if it exists)
-    if os.path.exists(logo_path):
-        logo = Image.open(logo_path).convert("RGBA")
-        # Example: scale the logo to ~1/3 of the image width
-        logo_width = edited.width // 3
-        logo_ratio = logo_width / logo.width
-        logo_height = int(logo.height * logo_ratio)
-        logo = logo.resize((logo_width, logo_height))
-
-        logo_x = edited.width - logo_width
-        logo_y = edited.height - logo_height
-        edited.paste(logo, (logo_x, logo_y), logo)
-
-    # 4) Draw text overlay
-    draw = ImageDraw.Draw(edited)
-    try:
-        font = ImageFont.truetype("ComicSansMS.ttf", 24)
-    except IOError:
-        font = ImageFont.load_default()
-
-    draw.text((10, 10), text_overlay, font=font, fill="red")
+    #if os.path.exists(logo_path):
+    #    logo = Image.open(logo_path).convert("RGBA")
+    #    # Example: scale the logo to ~1/3 of the image width
+    #    logo_width = edited.width // 3
+    #    logo_ratio = logo_width / logo.width
+    #    logo_height = int(logo.height * logo_ratio)
+    #    logo = logo.resize((logo_width, logo_height))
+#
+    #    logo_x = edited.width - logo_width
+    #    logo_y = edited.height - logo_height
+    #    edited.paste(logo, (logo_x, logo_y), logo)
 
     return edited
 
@@ -144,17 +151,32 @@ def save_output_image(edited_image: Image.Image, uploads_folder: str, image_hash
     edited_image.save(output_path, "JPEG")
     return output_path
 
-def build_flask_image_response(edited_image: Image.Image, text_response: str):
+def build_flask_image_response(edited_image: Image.Image, text_response: str, is_statement_true: bool):
     """
     Converts the edited PIL image to a BytesIO response and attaches a
-    JSON-encoded text response in the 'x-description' header.
+    JSON-encoded text response and truthfulness flag in the 'x-description' header.
+
+    Parameters:
+    - edited_image (Image.Image): The PIL image to be returned.
+    - text_response (str): The response text explaining the truthfulness of the statement.
+    - is_statement_true (bool): A boolean flag indicating whether the statement is true or false.
+
+    Returns:
+    - Flask response object containing the image and metadata.
     """
     output = BytesIO()
     edited_image.save(output, format='JPEG')
     output.seek(0)
 
+    # Create JSON metadata
+    metadata = {
+        "text": text_response,
+        "is_statement_true": is_statement_true  # ✅ Include truthfulness flag
+    }
+
     response = make_response(send_file(output, mimetype='image/jpeg'))
-    response.headers['x-description'] = json.dumps({"text": text_response})
+    response.headers['x-description'] = json.dumps(metadata)
+
     return response
 
 def create_and_commit_record(session, image_hash, input_path, output_path, extracted_text, truthfulness_response):
@@ -217,12 +239,24 @@ def process_image():
     print("Extracted text:", extracted_text)
 
     # 5) Generate answer (via ChatGPT or future local LLM)
-    truthfulness_response = check_truth_with_chatgpt(extracted_text)
-    print("ChatGPT response:", truthfulness_response)
+    # ---- Pass FAISS objects & params ----
+    truthfulness_response = check_truth_with_chatgpt(
+        extracted_text=extracted_text,
+        faiss_index=faiss_index,           # Global from top-level load
+        embedding_model=embedding_model,   # Global from top-level load
+        all_chunks=all_chunks,
+        metadata=metadata,
+        normalise=normalise,
+        alpha=ALPHA,
+        selected_types=SELECTED_TYPES,
+        max_sources=5
+    )
+
+
 
     # 6) Edit the image
     logo_path = 'logo.png'
-    edited_image = edit_image_with_logo_and_text(file_bytes, logo_path, truthfulness_response)
+    edited_image = edit_image_with_logo_and_text(file_bytes, logo_path, truthfulness_response["is_likely_true"])
 
     # 7) Save the output image
     output_path = save_output_image(edited_image, uploads_folder, image_hash)
@@ -234,20 +268,27 @@ def process_image():
         input_path,
         output_path,
         extracted_text,
-        truthfulness_response
+        truthfulness_response["statement_analysis"]
     )
 
     # 9) Build the Flask response
-    response = build_flask_image_response(edited_image, truthfulness_response)
+    response = build_flask_image_response(edited_image, truthfulness_response["statement_analysis"], truthfulness_response["is_likely_true"])
     session.close()
     return response
+
+from flask import send_from_directory
+
+@app.route('/uploads/<filename>')
+def serve_uploaded_file(filename):
+    uploads_folder = "C:/Users/TE/Documents/20241108_climate_fake_filter/uploads"
+    return send_from_directory(uploads_folder, filename)
 
 @app.route('/api/gallery-images', methods=['GET'])
 def get_gallery_images():
     """
     Lists existing _input and _output image pairs from a known folder.
     """
-    uploads_folder = 'C:/Users/TE/Documents/fake_news_sharepics/uploads'
+    uploads_folder = 'C:/Users/TE/Documents/20241108_climate_fake_filter/uploads'
     images = []
 
     for filename in os.listdir(uploads_folder):

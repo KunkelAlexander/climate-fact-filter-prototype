@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+
 import axios from 'axios';
+
 import './App.css';
 
 const uploadImageToCloudinary = async (imagePath) => {
@@ -11,6 +14,8 @@ function App() {
   const [activeTab, setActiveTab] = useState('sharepic'); // State to manage active tab
   const [processedImage, setProcessedImage] = useState(null);
   const [analysisText, setAnalysisText] = useState(''); // New state for analysis text
+  const [isStatementTrue, setIsStatementTrue] = useState(null); // ✅ New state for truth flag
+
   const [analyzing, setAnalyzing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
@@ -141,9 +146,11 @@ function App() {
       // Retrieve the analysis text from the response header
       const analysisTextHeader = response.headers['x-description'];
       if (analysisTextHeader) {
-        const analysisTextJSON = JSON.parse(analysisTextHeader);
-        setAnalysisText(analysisTextJSON.text); // Set the analysis text
-        console.log(analysisTextJSON.text);
+        const analysisData = JSON.parse(analysisTextHeader);
+        setAnalysisText(analysisData.text); // ✅ Set analysis text
+        setIsStatementTrue(analysisData.is_statement_true); // ✅ Set truth flag
+        console.log("Analysis Text:", analysisData.text);
+        console.log("Is Statement True?", analysisData.is_statement_true);
       }
     } catch (error) {
       console.error("Error processing the image:", error);
@@ -253,17 +260,19 @@ function App() {
                   </div>
                 )}
                 {processedImage && (
-                  <div className="image-preview">
-                    <h3>Fake!</h3>
-                    <img src={processedImage} alt="Fake!" />
-                  </div>
-                )}
+                        <div className={`image-preview ${isStatementTrue ? 'true-statement' : 'false-statement'}`}>
+                          <h3 className={isStatementTrue ? 'true-header' : 'false-header'}>
+                            {isStatementTrue ? "✅ True!" : "❌ Fake!"}
+                          </h3>
+                          <img src={processedImage} alt={isStatementTrue ? "Verified True" : "Marked Fake"} />
+                        </div>
+                      )}
               </div>
 
               {/* Analysis Box below the image-grid */}
               {analysisText && (
                 <div className="analysis-box">
-                  <p>{analysisText}</p>
+                  <ReactMarkdown>{analysisText}</ReactMarkdown>
                 </div>
               )}
             </>
@@ -273,14 +282,14 @@ function App() {
             <div className="gallery-grid">
               {galleryImages.length > 0 ? (
                 galleryImages.map((imagePair, index) => (
-                  <div key={index} className="gallery-item">
+                  <div key={index} className="gallery-row">
                     <div className="image-preview">
                       <h3>True?</h3>
-                      <img src={`C:/Users/TE/Documents/fake_news_sharepics/uploads/${imagePair.input}`} alt="True sharepic?" />
+                      <img src={`http://127.0.0.1:5000/${imagePair.input}`} alt="True sharepic?" />
                     </div>
                     <div className="image-preview">
                       <h3>Fake!</h3>
-                      <img src={`C:/Users/TE/Documents/fake_news_sharepics/uploads/${imagePair.output}`} alt="Fake sharepic" />
+                      <img src={`http://127.0.0.1:5000/${imagePair.output}`} alt="Fake sharepic" />
                     </div>
                   </div>
                 ))

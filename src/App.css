@@ -214,17 +214,49 @@ body, html {
   gap: 0.5rem; /* Space between logo and heading */
 }
 
+/* Header for a true statement */
+.true-header {
+  color: green;
+  font-weight: bold;
+}
+
+/* Header for a false statement */
+.false-header {
+  color: red;
+  font-weight: bold;
+}
+
+/* Image border based on truthfulness */
+.true-statement img {
+  border: 5px solid green;
+}
+
+.false-statement img {
+  border: 5px solid red;
+}
+
+
 /* Logo styling */
 .logo {
   width: 70px; /* Adjust width as needed */
   height: auto; /* Maintain aspect ratio */
 }
 
-/* Gallery Grid Layout */
 .gallery-grid {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  flex-wrap: wrap; /* Wraps rows if needed */
+  justify-content: center;
+  gap: 20px; /* Space between rows */
+}
+
+.gallery-row {
+  display: flex;
+  justify-content: space-between; /* Spread true/false images */
+  align-items: center;
+  width: 100%; /* Full width */
+  max-width: 800px; /* Adjust based on layout */
+  padding: 10px;
+  border-bottom: 2px solid #ddd; /* Optional divider */
 }
 
 .gallery-item {
